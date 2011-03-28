@@ -16,7 +16,7 @@ public class EdgeMain extends JPanel {
 
 		BufferedImage imageOne = ImageIO
 				.read(new URL(
-						"http://farm2.static.flickr.com/1400/5136927929_e0ae2b21c7_b.jpg"));
+						"http://farm5.static.flickr.com/4006/5137530598_f3a278e106_b.jpg"));
 
 		BufferedImage imageTwo = new BufferedImage(imageOne.getWidth(),
 				imageOne.getHeight(), BufferedImage.TYPE_INT_RGB);
@@ -42,6 +42,8 @@ public class EdgeMain extends JPanel {
 		 * 
 		 * }
 		 */
+		
+		 
 
 		CannyEdgeDetector detector = new CannyEdgeDetector();
 		detector.setSourceImage(imageOne);
@@ -50,6 +52,14 @@ public class EdgeMain extends JPanel {
 
 		detector.process();
 		imageTwo = detector.getEdgesImage();
+		
+		for (int x = 0; x < imageOne.getWidth(); x++) {
+			for (int y = 0; y < imageOne.getHeight(); y++) {
+				if (ImgUtil.getGreyScale(imageTwo, x, y)==0) {
+					imageTwo.setRGB(x, y, imageOne.getRGB(x, y));
+				}
+			}
+		}
 
 		JFrame frame = new JFrame();
 
