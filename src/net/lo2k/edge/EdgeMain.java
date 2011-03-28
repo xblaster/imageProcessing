@@ -37,8 +37,13 @@ public class EdgeMain extends JPanel {
 				// int blue = imageOne.getBlue(x,y);
 
 				/* Put these values into imageTwo */
+				 int red = ((rgb >> 16) & 255);
+			     int green = ((rgb >> 8) & 255) ;
+			     int blue = (rgb & 255);
 
-				imageTwo.setRGB(x, y, rgb);
+			     
+			    int greyScale = ImgUtil.getGreyScale(imageOne, x, y); 
+				imageTwo.setRGB(x, y, ImgUtil.toRGB(greyScale, greyScale, greyScale));
 
 			}
 
