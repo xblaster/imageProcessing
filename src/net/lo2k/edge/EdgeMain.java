@@ -1,5 +1,6 @@
 package net.lo2k.edge;
 
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -11,53 +12,41 @@ import javax.swing.JPanel;
 
 public class EdgeMain extends JPanel {
 
+	private static final String FIND_IMG_URL = "http://www.terrapixela.com/wp-content/uploads/images/icoeye-bibliotheque-ban.jpg";
+	private static final String IMG_URL = "http://www.terrapixela.com/wp-content/uploads/images/pixels/icoeye-bibliotheque.jpg";
+	
+	
 	public static void main(String args[]) throws MalformedURLException,
 			IOException {
 
 		BufferedImage imageOne = ImageIO
 				.read(new URL(
-						"http://farm5.static.flickr.com/4006/5137530598_f3a278e106_b.jpg"));
+						IMG_URL	));
+		
+		//resize 
+		BufferedImage resized = ImgUtil.resize(imageOne, imageOne.getWidth()/2, imageOne.getHeight()/2, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 
-		BufferedImage imageTwo = new BufferedImage(imageOne.getWidth(),
-				imageOne.getHeight(), BufferedImage.TYPE_INT_RGB);
+		BufferedImage imageTwo;
 
-		/*
-		 * for (int x = 1; x < imageOne.getWidth()-1; x++) {
-		 * 
-		 * for (int y = 1; y < imageOne.getHeight()-1; y++) {
-		 * 
-		 * int greyScale = ImgUtil.getGreyScale(imageOne, x, y); int
-		 * greyScaleAround = 0; for (int i = -1; i <= 1; i++) { for (int j = -1;
-		 * j <= 1; j++) { if ((i!=0 && (j!=0))) { greyScaleAround+=
-		 * ImgUtil.getGreyScale(imageOne, x+i, y+j); } } } greyScaleAround =
-		 * greyScaleAround/8;
-		 * 
-		 * 
-		 * if (Math.abs(greyScaleAround-greyScale)>25) { imageTwo.setRGB(x, y,
-		 * ImgUtil.toRGB(255, 255, 255)); } else { imageTwo.setRGB(x, y,
-		 * ImgUtil.toRGB(0 , 0, 0)); }
-		 * 
-		 * 
-		 * }
-		 * 
-		 * }
-		 */
 		
 		 
 
 		CannyEdgeDetector detector = new CannyEdgeDetector();
-		detector.setSourceImage(imageOne);
+		detector.setSourceImage(resized);
 		/*detector.setLowThreshold(0.5f);
 		detector.setHighThreshold(1f);*/
 
 		detector.process();
 		imageTwo = detector.getEdgesImage();
 		
-		for (int x = 0; x < imageOne.getWidth(); x++) {
-			for (int y = 0; y < imageOne.getHeight(); y++) {
-				if (ImgUtil.getGreyScale(imageTwo, x, y)==0) {
+		for (int x = 0; x < resized.getWidth(); x++) {
+			for (int y = 0; y < resized.getHeight(); y++) {
+				//System.out.println((int)imageTwo.getRGB(x, y));
+				if (ImgUtil.isWhitePixel(imageTwo, x, y)) {
+					
 					imageTwo.setRGB(x, y, imageOne.getRGB(x, y));
 				}
+				//imageTwo.setRGB(x, y, imageOne.getRGB(x, y));
 			}
 		}
 
