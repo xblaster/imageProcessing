@@ -1,5 +1,6 @@
 package net.lo2k.edge;
 
+import java.awt.GridLayout;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -12,16 +13,23 @@ import javax.swing.JPanel;
 
 public class EdgeMain extends JPanel {
 
-	private static final String FIND_IMG_URL = "http://www.terrapixela.com/wp-content/uploads/images/icoeye-bibliotheque-ban.jpg";
-	private static final String IMG_URL = "http://www.terrapixela.com/wp-content/uploads/images/pixels/icoeye-bibliotheque.jpg";
+	//triangle
+	//private static final String FIND_IMG_URL = "http://www.insolite.ca/wp-content/uploads/2009/10/soccer-ball.jpg";
+	//
+	
+	//ball1
+	//private static final String FIND_IMG_URL = "http://www.montigny78.fr/montigny/2101/TRIANGLE3.JPG";
+		
+	//inca ball
+	private static final String FIND_IMG_URL = "http://www.incaballonlinegame.com/images/screenshots/inca-ball_1.jpg";
+	private static final String IMG_URL = "http://ca.7digital.com/cms/USEvents/Img/Stock-Soccer-Ball.jpg";
 	
 	
 	public static void main(String args[]) throws MalformedURLException,
 			IOException {
 
-		BufferedImage imageOne = ImageIO
-				.read(new URL(
-						IMG_URL	));
+		BufferedImage imageOne = ImageIO.read(new URL(IMG_URL));
+		BufferedImage imagePattern = ImageIO.read(new URL(FIND_IMG_URL));
 		
 		//resize 
 		BufferedImage resized = ImgUtil.resize(imageOne, imageOne.getWidth()/2, imageOne.getHeight()/2, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
@@ -50,20 +58,21 @@ public class EdgeMain extends JPanel {
 			}
 		}
 		
-		PatternDetector pDetector = new PatternDetector();
-		pDetector.setImage(imageTwo);
-		pDetector.setPattern(imageTwo);
-		pDetector.detect();
-		
-
 		JFrame frame = new JFrame();
 
+		frame.setLayout(new GridLayout(1, 3));
 		frame.add(new DisplayPanel(imageTwo));
 
+		frame.add(new DisplayPanel(imageOne));
+		frame.add(new DisplayPanel(imagePattern));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.pack();
-
+		
+		PatternDetector pDetector = new PatternDetector();
+		pDetector.setImage(imageOne);
+		pDetector.setPattern(imagePattern);
+		pDetector.detect();
 	}
 
 }

@@ -1,5 +1,6 @@
 package net.lo2k.edge;
 
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 public class PatternDetector {
@@ -12,7 +13,7 @@ public class PatternDetector {
 	}
 	
 	public void setPattern(BufferedImage pattern) {
-		this.pattern = pattern;
+		this.pattern = getEdgesFor(pattern);
 	}
 
 	public BufferedImage getPattern() {
@@ -20,7 +21,7 @@ public class PatternDetector {
 	}
 
 	public void setImage(BufferedImage image) {
-		this.image = image;
+		this.image = getEdgesFor(image);
 	}
 
 	public BufferedImage getImage() {
@@ -33,6 +34,14 @@ public class PatternDetector {
 		System.out.println(hd.iterate(pattern, image));
 	}
 	
+	private BufferedImage getEdgesFor(BufferedImage img) {
+		CannyEdgeDetector detector = new CannyEdgeDetector();
+		BufferedImage resized = ImgUtil.resize(img, 250,250, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+		detector.setSourceImage(resized);
+
+		detector.process();
+		return detector.getEdgesImage();
+	}
 	
 	
 	
