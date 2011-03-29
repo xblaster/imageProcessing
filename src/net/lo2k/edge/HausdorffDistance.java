@@ -22,6 +22,9 @@ public class HausdorffDistance {
 					offset = localDistance;
 				} else {
 					offset += 1d;
+					//limit the offset
+					if (offset > height/3) 
+						offset = height/3;
 				}
 			}
 		}
@@ -33,8 +36,11 @@ public class HausdorffDistance {
 
 
 	private double calculateNeareastPointDistance(BufferedImage groupB2, int x, int y, int offset) {
+		System.out.println("===========================");
 		System.out.println("Nearest for " + x + "," + y);
+		System.out.println("offset "+offset);
 		if (ImgUtil.isWhitePixel(groupB2, x, y)) {
+			System.out.println("Exact match ! 0l");
 			return 0l;
 		}
 		double bestDistance = Long.MAX_VALUE;
@@ -43,14 +49,15 @@ public class HausdorffDistance {
 		for (int i = x-offset/2; i < x+offset/2; i++) {
 			for (int j = y-offset/2; j < y+offset/2; j++) {
 				if (ImgUtil.isWhitePixel(groupB2, i, j)) {
+					System.out.println(i+","+j+" -> X");
 					//small optimisation
 					if (Math.abs(i - x) < bestDistance) {
 						if (Math.abs(j - y) < bestDistance) {
-							double euclidianDistance = Math.sqrt((i - x) ^ 2
-									+ (j - y) ^ 2);
+							double euclidianDistance = Math.sqrt((i - x)*(i - x)
+									+ (j - y)*(j - y));
 
 							if (euclidianDistance < bestDistance) {
-								System.out.println("Best at "+x+", "+y+" -> "+euclidianDistance);
+								System.out.println("Best at "+i+", "+j+" -> "+euclidianDistance);
 								bestDistance = euclidianDistance;
 							}
 						}
@@ -58,11 +65,11 @@ public class HausdorffDistance {
 				}
 			}
 		}
-		System.out.println(bestDistance);
+		//System.out.println(bestDistance);
 		if (bestDistance == Long.MAX_VALUE) {
-			return offset+1d;
+			bestDistance = offset+1d;
 		}
-
+		System.out.println("best "+bestDistance);
 		return bestDistance;
 	}
 
