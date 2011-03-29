@@ -49,6 +49,12 @@ public class EdgeMain extends JPanel {
 				//imageTwo.setRGB(x, y, imageOne.getRGB(x, y));
 			}
 		}
+		
+		PatternDetector pDetector = new PatternDetector();
+		pDetector.setImage(imageTwo);
+		pDetector.setPattern(imageTwo);
+		//pDetector.detect();
+		
 
 		JFrame frame = new JFrame();
 

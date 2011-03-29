@@ -28,7 +28,12 @@ public class PatternDetector {
 	}
 	
 	public void detect() {
+		HausdorffDistance hd = new HausdorffDistance();
 		
+		System.out.println(hd.iterate(pattern, image));
 	}
+	
+	
+	
 	
 }

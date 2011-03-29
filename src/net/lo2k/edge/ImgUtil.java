@@ -100,4 +100,17 @@ public class ImgUtil {
 	        GraphicsDevice gd = ge.getDefaultScreenDevice();
 	        return gd.getDefaultConfiguration();
 	  }
+	  
+	  public static int getWhitePixelsFor(BufferedImage img) {
+		  int res = 0;
+		  for (int i =0; i < img.getWidth(); i++) {
+			  for (int j =0; j < img.getHeight(); j++) {
+				  if (ImgUtil.isWhitePixel(img, i, j)) {
+					  res++;
+				  }
+			  }
+		  }
+		  
+		  return res;
+	  }
 }

@@ -1,0 +1,48 @@
+package net.lo2k.edge;
+
+import java.awt.image.BufferedImage;
+
+public class HausdorffDistance {
+	public double iterate(BufferedImage groupA, BufferedImage groupB) {
+		
+		int nbWhitePoint = 0;
+		long distance = 0l;
+		
+		for (int i = 0; i < groupA.getWidth(); i++) {
+			for (int j = 0; i < groupA.getHeight(); j++) {
+				if (ImgUtil.isWhitePixel(groupA, i, j)) {
+					nbWhitePoint++;
+					distance += calculateNeareastPointDistance(groupB,i,j);
+				}
+			}
+		}
+		System.out.println("DEBUG info");
+		System.out.println("nbPoint: "+nbWhitePoint );
+		System.out.println("distance: "+distance);
+		return (distance/nbWhitePoint);
+	}
+
+
+	private double calculateNeareastPointDistance(BufferedImage groupB2, int x, int y) {
+		if (ImgUtil.isWhitePixel(groupB2, x, y)) {
+			return 0l;
+		}
+		double bestDistance = Long.MAX_VALUE; 
+		for (int i = 0; i < groupB2.getWidth(); i++) {
+			for (int j = 0; i < groupB2.getHeight(); j++) {
+				if (ImgUtil.isWhitePixel(groupB2, i, j)) {
+					double euclidianDistance = Math.sqrt((i+x)^2+(j+y)^2);
+					
+					if (euclidianDistance < bestDistance) {
+						bestDistance = euclidianDistance;
+					}
+				}
+			}
+		}
+		
+		return bestDistance;
+	}
+
+
+	
+}
