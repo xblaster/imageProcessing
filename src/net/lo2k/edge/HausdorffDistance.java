@@ -8,8 +8,11 @@ public class HausdorffDistance {
 		int nbWhitePoint = 0;
 		long distance = 0l;
 		
-		for (int i = 0; i < groupA.getWidth(); i++) {
-			for (int j = 0; i < groupA.getHeight(); j++) {
+		int width = groupA.getWidth();
+		int height = groupA.getHeight();
+		
+		for (int i = 0; i < width; i++) {
+			for (int j = 0; j < height; j++) {
 				if (ImgUtil.isWhitePixel(groupA, i, j)) {
 					nbWhitePoint++;
 					distance += calculateNeareastPointDistance(groupB,i,j);
@@ -24,6 +27,7 @@ public class HausdorffDistance {
 
 
 	private double calculateNeareastPointDistance(BufferedImage groupB2, int x, int y) {
+		//System.out.println("Nearest for "+x+"," +y);
 		if (ImgUtil.isWhitePixel(groupB2, x, y)) {
 			return 0l;
 		}
