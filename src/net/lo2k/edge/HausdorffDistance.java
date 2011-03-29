@@ -6,7 +6,7 @@ public class HausdorffDistance {
 	public double iterate(BufferedImage groupA, BufferedImage groupB) {
 		
 		int nbWhitePoint = 0;
-		long distance = 0l;
+		double distance = 0d;
 		
 		int width = groupA.getWidth();
 		int height = groupA.getHeight();
@@ -31,7 +31,7 @@ public class HausdorffDistance {
 		System.out.println("DEBUG info");
 		System.out.println("nbPoint: "+nbWhitePoint );
 		System.out.println("distance: "+distance);
-		return (distance/(float)nbWhitePoint);
+		return (distance/(double)nbWhitePoint);
 	}
 
 
