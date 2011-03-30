@@ -23,10 +23,10 @@ public class EdgeMain extends JPanel {
 	//private static final String FIND_IMG_URL = "http://www.montigny78.fr/montigny/2101/TRIANGLE3.JPG";
 		
 	//plage
-	private static final String FIND_IMG_URL = "http://www.photoway.com/images/martinique/plus-belle-plage.jpg";
+	//private static final String FIND_IMG_URL = "http://www.photoway.com/images/martinique/plus-belle-plage.jpg";
 	
 	//inca ball
-	//private static final String FIND_IMG_URL = "http://www.incaballonlinegame.com/images/screenshots/inca-ball_1.jpg";
+	private static final String FIND_IMG_URL = "http://www.incaballonlinegame.com/images/screenshots/inca-ball_1.jpg";
 	//private static final String FIND_IMG_URL = "http://ca.7digital.com/cms/USEvents/Img/Stock-Soccer-Ball.jpg";
 	//private static final String IMG_URL = "http://ca.7digital.com/cms/USEvents/Img/Stock-Soccer-Ball.jpg";
 	
@@ -45,17 +45,17 @@ public class EdgeMain extends JPanel {
 		
 		 
 
-		CannyEdgeDetector detector = new CannyEdgeDetector();
+		/*CannyEdgeDetector detector = new CannyEdgeDetector();
 		detector.setSourceImage(imageOne);
 		/*detector.setLowThreshold(0.5f);
 		detector.setHighThreshold(1f);*/
-		detector.process();
+		/*detector.process();
 		BufferedImage imageOneEdge = detector.getEdgesImage();
 		
 		detector = new CannyEdgeDetector();
 		detector.setSourceImage(imagePattern);
 		detector.process();
-		BufferedImage imagePatternEdge = detector.getEdgesImage();
+		BufferedImage imagePatternEdge = detector.getEdgesImage();*/
 
 		
 		/*for (int x = 0; x < resized.getWidth(); x++) {
@@ -71,19 +71,26 @@ public class EdgeMain extends JPanel {
 		
 		JFrame frame = new JFrame();
 
-		frame.setLayout(new GridLayout(1, 3));
+		frame.setLayout(new GridLayout(2, 2));
 		//frame.add(new DisplayPanel(imageTwo));
 
-		frame.add(new DisplayPanel(ImgUtil.resize(imageOneEdge,250,250, RenderingHints.VALUE_INTERPOLATION_BICUBIC)));
-		frame.add(new DisplayPanel(ImgUtil.resize(imagePatternEdge,250,250, RenderingHints.VALUE_INTERPOLATION_BICUBIC)));
+		PatternDetector pDetector = new PatternDetector();
+		
+		frame.add(new DisplayPanel(pDetector.getEdgesFor(imageOne)));
+		frame.add(new DisplayPanel(pDetector.getEdgesFor(imagePattern)));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.pack();
 		
-		PatternDetector pDetector = new PatternDetector();
+		
 		pDetector.setImage(imageOne);
 		pDetector.setPattern(imagePattern);
 		pDetector.detect();
+		
+		frame.add(new DisplayPanel(pDetector.getDebugImg1()));
+		frame.add(new DisplayPanel(pDetector.getDebugImg2()));
+		frame.validate();
+		frame.pack();
 	}
 
 }

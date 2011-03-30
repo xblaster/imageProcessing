@@ -1,10 +1,27 @@
 package net.lo2k.edge;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import javax.swing.DebugGraphics;
+
 public class HausdorffDistance {
+	
+	BufferedImage debugImg;
+	private Graphics2D g2d;
+
+	//will not search farther than width/4 size of the image
+	private static final short DIVISED_OFFSET = 4;
+	
+	public HausdorffDistance() {
+	}
+	
 	public double iterate(BufferedImage groupA, BufferedImage groupB) {
 		
+		debugImg = new BufferedImage(groupA.getWidth(), groupB.getHeight(), BufferedImage.TYPE_INT_RGB);
+		g2d = debugImg.createGraphics();
 		int nbWhitePoint = 0;
 		double distance = 0d;
 		
@@ -13,18 +30,25 @@ public class HausdorffDistance {
 		
 		
 		for (int i = 0; i < width; i++) {
-			double offset = height / 3;
+			double offset = height / DIVISED_OFFSET;
 			for (int j = 0; j < height; j++) {
 				if (ImgUtil.isWhitePixel(groupA, i, j)) {
 					nbWhitePoint++;
 					double localDistance = calculateNeareastPointDistance(groupB,i,j,(int)offset); 
 					distance += localDistance;
 					offset = localDistance;
+					
+					//debug img
+					int greyLevel = 255-((int) localDistance*20);
+					if (greyLevel < 0) {
+						greyLevel = 0;
+					}
+					debugImg.setRGB(i, j, ImgUtil.toRGB(greyLevel, greyLevel, greyLevel));
 				} else {
 					offset += 1d;
 					//limit the offset
-					if (offset > height/3) 
-						offset = height/3;
+					if (offset > height/DIVISED_OFFSET) 
+						offset = height/DIVISED_OFFSET;
 				}
 			}
 		}
@@ -44,8 +68,10 @@ public class HausdorffDistance {
 			return 0l;
 		}
 		double bestDistance = Long.MAX_VALUE;
-		/*for (int i = 0; i < groupB2.getWidth(); i++) {
-			for (int j = 0; j < groupB2.getHeight(); j++) {*/
+		
+		int bestX = -1;
+		int bestY = -1;
+		
 		for (int i = x-offset/2; i < x+offset/2; i++) {
 			for (int j = y-offset/2; j < y+offset/2; j++) {
 				if (ImgUtil.isWhitePixel(groupB2, i, j)) {
@@ -55,9 +81,11 @@ public class HausdorffDistance {
 						if (Math.abs(j - y) < bestDistance) {
 							double euclidianDistance = Math.sqrt((i - x)*(i - x)
 									+ (j - y)*(j - y));
-
+							//double euclidianDistance = (i - x)*(i - x)+ (j - y)*(j - y);
 							if (euclidianDistance < bestDistance) {
 								System.out.println("Best at "+i+", "+j+" -> "+euclidianDistance);
+								bestX = i;
+								bestY = j;
 								bestDistance = euclidianDistance;
 							}
 						}
@@ -69,8 +97,19 @@ public class HausdorffDistance {
 		if (bestDistance == Long.MAX_VALUE) {
 			bestDistance = offset+1d;
 		}
+		
+		if (bestX!=-1) {
+			g2d.setColor(new Color(0.2f,1,1,0.2f));
+			BasicStroke bs = new BasicStroke(1);
+			g2d.setStroke(bs);
+			g2d.drawLine(x,y, bestX, bestY);
+		}
 		System.out.println("best "+bestDistance);
 		return bestDistance;
+	}
+
+	public BufferedImage getDebugImg() {
+		return debugImg;
 	}
 
 
