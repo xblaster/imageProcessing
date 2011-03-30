@@ -63,7 +63,7 @@ public class Detector {
 					//this.listener.onAction(new Rectangle(bestX, bestY, pattern.getWidth(), pattern.getHeight()));
 				}
 				
-				if (dist < 26.5f) {
+				if (dist < 15.5f) {
 					this.listener.onAction(new Rectangle(i, j, pattern.getWidth(), pattern.getHeight()));
 				}
 				
