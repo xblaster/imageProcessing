@@ -38,9 +38,21 @@ public class Detector {
 				//hausdorffDistance.setImage(ImgUtil.getSubimage(i, j, 100, 100));
 				hausdorffDistance.setPattern(pattern);
 				//System.out.println(i+", "+j+" => "+hausdorffDistance.getDistance());
-				int val = (int) hausdorffDistance.getDistance();
+				double dist = hausdorffDistance.getDistance();
+				int val = (int) dist; 
 				int color = ImgUtil.toRGB(val, val, val);
 				draw(dbgImg, i, j, color, 10);
+				
+				if (dist < bestCandidate) {
+					//remove old color
+					int oldColor = ImgUtil.toRGB((int)bestCandidate, (int)bestCandidate, (int)bestCandidate);
+					draw(dbgImg, bestX, bestY, oldColor, 10);
+					
+					draw(dbgImg, i, j, ImgUtil.toRGB(255, 0, 0), 10);
+					bestX = i;
+					bestY = j;
+					bestCandidate = dist;
+				}
 				
 				frame.repaint();
 			}
