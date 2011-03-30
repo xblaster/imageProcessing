@@ -15,7 +15,7 @@ public class Detector {
 
 	private Listener<Rectangle> listener;
 	
-	public static int INCREMENT = 10;
+	public static int INCREMENT = 20;
 	
 	public Detector() {
 		hausdorffDistance = new HausdorffDistance();
@@ -60,13 +60,13 @@ public class Detector {
 					bestY = j;
 					bestCandidate = dist;
 					System.out.println(dist);
-					//this.listener.onAction(new Rectangle(bestX, bestY, pattern.getWidth(), pattern.getHeight()));
+					this.listener.onAction(new Rectangle(bestX, bestY, pattern.getWidth(), pattern.getHeight()));
 				}
 				
 				//if (dist < 15.5f) {
-				if (dist < 20.5f) {
+				/*if (dist < 20.5f) {
 					this.listener.onAction(new Rectangle(i, j, pattern.getWidth(), pattern.getHeight()));
-				}
+				}*/
 				
 				
 				

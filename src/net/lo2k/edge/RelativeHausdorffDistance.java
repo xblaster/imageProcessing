@@ -14,7 +14,8 @@ public class RelativeHausdorffDistance {
 	}
 	
 	public double iterate(BufferedImage groupA, BufferedImage groupB) {
-		if (ImgUtil.getWhitePixelsFor(groupA)==0) {
+		int nbWhitePoint = ImgUtil.getWhitePixelsFor(groupA);
+		if (nbWhitePoint==0) {
 			return Double.MAX_VALUE;
 		}
 		
@@ -24,9 +25,9 @@ public class RelativeHausdorffDistance {
 		
 		//debugImg = new BufferedImage(groupA.getWidth(), groupB.getHeight(), BufferedImage.TYPE_INT_RGB);
 		//g2d = debugImg.createGraphics();
-		int nbWhitePoint = 0;
-		double distance = 0d;
 		
+		double distance = 0d;
+		double distanceBeforeBreak = 50*nbWhitePoint;
 		int width = groupA.getWidth();
 		int height = groupA.getHeight();
 		
@@ -38,6 +39,12 @@ public class RelativeHausdorffDistance {
 					nbWhitePoint++;
 					double localDistance = calculateNeareastPointDistance(groupB,i,j,(int)offset); 
 					distance += localDistance;
+					
+					//DIRT HACK TO SPEEDUP ALGO
+					if (distance>distanceBeforeBreak) {
+						return Double.MAX_VALUE;
+					}
+					
 					offset = localDistance;
 					
 					//debug img
