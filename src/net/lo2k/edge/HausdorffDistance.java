@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import javax.swing.DebugGraphics;
-
 public class HausdorffDistance {
 	
 	BufferedImage debugImg;
