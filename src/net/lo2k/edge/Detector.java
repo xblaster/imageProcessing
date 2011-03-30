@@ -63,7 +63,8 @@ public class Detector {
 					//this.listener.onAction(new Rectangle(bestX, bestY, pattern.getWidth(), pattern.getHeight()));
 				}
 				
-				if (dist < 15.5f) {
+				//if (dist < 15.5f) {
+				if (dist < 20.5f) {
 					this.listener.onAction(new Rectangle(i, j, pattern.getWidth(), pattern.getHeight()));
 				}
 				
@@ -89,6 +90,10 @@ public class Detector {
 		CannyEdgeDetector detector = new CannyEdgeDetector();
 		//BufferedImage resized = ImgUtil.resize(img, 100,100, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 		//detector.setSourceImage(resized);
+		//lowThreshold = 2.5f;
+		//highThreshold = 7.5f;
+		detector.setLowThreshold(2.5f);
+		detector.setHighThreshold(10f);
 		detector.setSourceImage(img);
 		detector.process();
 		return detector.getEdgesImage();
