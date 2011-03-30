@@ -80,6 +80,7 @@ public class EdgeMain extends JPanel {
 		//frame.add(new DisplayPanel(detector.getEdgesFor(imageOne)));
 		//frame.add(new DisplayPanel(detector.getEdgesFor(imagePattern)));
 		frame.add(new DisplayPanel(imageOne));
+		frame.add(new DisplayPanel(detector.getEdgesFor(imageOne)));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.pack();

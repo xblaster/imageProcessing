@@ -15,7 +15,7 @@ public class Detector {
 
 	private Listener<Rectangle> listener;
 	
-	public static int INCREMENT = 15;
+	public static int INCREMENT = 10;
 	
 	public Detector() {
 		hausdorffDistance = new HausdorffDistance();
@@ -44,6 +44,9 @@ public class Detector {
 				//System.out.println(i+", "+j+" => "+hausdorffDistance.getDistance());
 				double dist = hausdorffDistance.getDistance();
 				int val = (int) dist; 
+				if(val>255) {
+					val = 255;
+				}
 				int color = ImgUtil.toRGB(val, val, val);
 				draw(dbgImg, i, j, color, INCREMENT);
 				
@@ -56,9 +59,15 @@ public class Detector {
 					bestX = i;
 					bestY = j;
 					bestCandidate = dist;
-					
-					this.listener.onAction(new Rectangle(bestX, bestY, pattern.getWidth(), pattern.getHeight()));
+					System.out.println(dist);
+					//this.listener.onAction(new Rectangle(bestX, bestY, pattern.getWidth(), pattern.getHeight()));
 				}
+				
+				if (dist < 26.5f) {
+					this.listener.onAction(new Rectangle(i, j, pattern.getWidth(), pattern.getHeight()));
+				}
+				
+				
 				
 				frame.repaint();
 			}
