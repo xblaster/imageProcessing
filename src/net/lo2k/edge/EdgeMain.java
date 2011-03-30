@@ -1,6 +1,9 @@
 package net.lo2k.edge;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -40,17 +43,9 @@ public class EdgeMain extends JPanel {
 		/*BufferedImage imageOne = ImageIO.read(new URL(IMG_URL));
 		BufferedImage imagePattern = ImageIO.read(new URL(FIND_IMG_URL));*/
 		
-		BufferedImage imageOne = ImageIO.read(new File(IMG_URL));
+		final BufferedImage imageOne = ImageIO.read(new File(IMG_URL));
 		BufferedImage imagePattern = ImageIO.read(new File(FIND_IMG_URL));
 		
-		//resize 
-		BufferedImage resized = ImgUtil.resize(imageOne, imageOne.getWidth()/2, imageOne.getHeight()/2, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-
-		BufferedImage imageTwo;
-
-		
-		 
-
 		/*CannyEdgeDetector detector = new CannyEdgeDetector();
 		detector.setSourceImage(imageOne);
 		/*detector.setLowThreshold(0.5f);
@@ -75,16 +70,16 @@ public class EdgeMain extends JPanel {
 			}
 		}*/
 		
-		JFrame frame = new JFrame();
+		final JFrame frame = new JFrame();
 
 		frame.setLayout(new GridLayout(2, 2));
 		//frame.add(new DisplayPanel(imageTwo));
 
 		Detector detector = new Detector();
-		HausdorffDistance hausdorffDis = new HausdorffDistance();
 		
-		frame.add(new DisplayPanel(detector.getEdgesFor(imageOne)));
-		frame.add(new DisplayPanel(detector.getEdgesFor(imagePattern)));
+		//frame.add(new DisplayPanel(detector.getEdgesFor(imageOne)));
+		//frame.add(new DisplayPanel(detector.getEdgesFor(imagePattern)));
+		frame.add(new DisplayPanel(imageOne));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.pack();
@@ -96,13 +91,32 @@ public class EdgeMain extends JPanel {
 		detector.setImage(imageOne);
 		detector.setPattern(imagePattern);
 		
-		detector.detect();
+		
+		
+		detector.setOnDetectListener(new Listener<Rectangle>() {
+			
+			@Override
+			public void onAction(Rectangle rect) {
+				//frame.removeAll();
+				Graphics2D g2d = imageOne.createGraphics();
+				g2d.setColor(new Color(1,0,0,0.2f));
+				g2d.drawRect(rect.x, rect.y, rect.width, rect.height);
+				//frame.add(new DisplayPanel(imageOne));
+				//frame.pack();
+				frame.repaint();
+			}
+		});
+		
+		Rectangle rect = detector.detect();
+		
+		Graphics2D g2d = imageOne.createGraphics();
+		g2d.setColor(Color.RED);
+		g2d.drawRect(rect.x, rect.y, rect.width, rect.height);
 		
 		
 		//frame.add(new DisplayPanel(pDetector.getDebugImg1()));
 		//frame.add(new DisplayPanel(pDetector.getDebugImg2()));
-		frame.validate();
-		frame.pack();
+		frame.repaint();
 	}
 
 }
