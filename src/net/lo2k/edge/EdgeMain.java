@@ -20,14 +20,14 @@ public class EdgeMain extends JPanel {
 	//private static final String FIND_IMG_URL = "http://www.footballpictures.net/data/media/144/Euro-2008-official-ball.jpg";
 	
 	//trian
-	//private static final String FIND_IMG_URL = "http://www.montigny78.fr/montigny/2101/TRIANGLE3.JPG";
+	private static final String FIND_IMG_URL = "http://www.montigny78.fr/montigny/2101/TRIANGLE3.JPG";
 		
 	//plage
 	//private static final String FIND_IMG_URL = "http://www.photoway.com/images/martinique/plus-belle-plage.jpg";
 	
 	//inca ball
 	//private static final String FIND_IMG_URL = "http://www.incaballonlinegame.com/images/screenshots/inca-ball_1.jpg";
-	private static final String FIND_IMG_URL = "http://ca.7digital.com/cms/USEvents/Img/Stock-Soccer-Ball.jpg";
+	//private static final String FIND_IMG_URL = "http://ca.7digital.com/cms/USEvents/Img/Stock-Soccer-Ball.jpg";
 	//private static final String IMG_URL = "http://ca.7digital.com/cms/USEvents/Img/Stock-Soccer-Ball.jpg";
 	
 	
@@ -74,7 +74,7 @@ public class EdgeMain extends JPanel {
 		frame.setLayout(new GridLayout(2, 2));
 		//frame.add(new DisplayPanel(imageTwo));
 
-		PatternDetector pDetector = new PatternDetector();
+		HausdorffDistance pDetector = new HausdorffDistance();
 		
 		frame.add(new DisplayPanel(pDetector.getEdgesFor(imageOne)));
 		frame.add(new DisplayPanel(pDetector.getEdgesFor(imagePattern)));
@@ -87,8 +87,8 @@ public class EdgeMain extends JPanel {
 		pDetector.setPattern(imagePattern);
 		pDetector.detect();
 		
-		frame.add(new DisplayPanel(pDetector.getDebugImg1()));
-		frame.add(new DisplayPanel(pDetector.getDebugImg2()));
+		//frame.add(new DisplayPanel(pDetector.getDebugImg1()));
+		//frame.add(new DisplayPanel(pDetector.getDebugImg2()));
 		frame.validate();
 		frame.pack();
 	}

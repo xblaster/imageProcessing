@@ -1,115 +1,70 @@
 package net.lo2k.edge;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 
 public class HausdorffDistance {
 	
-	BufferedImage debugImg;
-	private Graphics2D g2d;
-
-	//will not search farther than width/4 size of the image
-	private static final short DIVISED_OFFSET = 4;
+	private BufferedImage pattern;
+	private BufferedImage image;
+	
+	private BufferedImage debugImg1;
+	private BufferedImage debugImg2;
 	
 	public HausdorffDistance() {
+		
 	}
 	
-	public double iterate(BufferedImage groupA, BufferedImage groupB) {
-		
-		debugImg = new BufferedImage(groupA.getWidth(), groupB.getHeight(), BufferedImage.TYPE_INT_RGB);
-		g2d = debugImg.createGraphics();
-		int nbWhitePoint = 0;
-		double distance = 0d;
-		
-		int width = groupA.getWidth();
-		int height = groupA.getHeight();
-		
-		
-		for (int i = 0; i < width; i++) {
-			double offset = height / DIVISED_OFFSET;
-			for (int j = 0; j < height; j++) {
-				if (ImgUtil.isWhitePixel(groupA, i, j)) {
-					nbWhitePoint++;
-					double localDistance = calculateNeareastPointDistance(groupB,i,j,(int)offset); 
-					distance += localDistance;
-					offset = localDistance;
-					
-					//debug img
-					int greyLevel = 255-((int) localDistance*20);
-					if (greyLevel < 0) {
-						greyLevel = 0;
-					}
-					debugImg.setRGB(i, j, ImgUtil.toRGB(greyLevel, greyLevel, greyLevel));
-				} else {
-					offset += 1d;
-					//limit the offset
-					if (offset > height/DIVISED_OFFSET) 
-						offset = height/DIVISED_OFFSET;
-				}
-			}
-		}
-		System.out.println("DEBUG info");
-		System.out.println("nbPoint: "+nbWhitePoint );
-		System.out.println("distance: "+distance);
-		return (distance/(double)nbWhitePoint);
+	public void setPattern(BufferedImage pattern) {
+		this.pattern = getEdgesFor(pattern);
 	}
 
-
-	private double calculateNeareastPointDistance(BufferedImage groupB2, int x, int y, int offset) {
-		System.out.println("===========================");
-		System.out.println("Nearest for " + x + "," + y);
-		System.out.println("offset "+offset);
-		if (ImgUtil.isWhitePixel(groupB2, x, y)) {
-			System.out.println("Exact match ! 0l");
-			return 0l;
-		}
-		double bestDistance = Long.MAX_VALUE;
-		
-		int bestX = -1;
-		int bestY = -1;
-		
-		for (int i = x-offset/2; i < x+offset/2; i++) {
-			for (int j = y-offset/2; j < y+offset/2; j++) {
-				if (ImgUtil.isWhitePixel(groupB2, i, j)) {
-					System.out.println(i+","+j+" -> X");
-					//small optimisation
-					if (Math.abs(i - x) < bestDistance) {
-						if (Math.abs(j - y) < bestDistance) {
-							double euclidianDistance = Math.sqrt((i - x)*(i - x)
-									+ (j - y)*(j - y));
-							//double euclidianDistance = (i - x)*(i - x)+ (j - y)*(j - y);
-							if (euclidianDistance < bestDistance) {
-								System.out.println("Best at "+i+", "+j+" -> "+euclidianDistance);
-								bestX = i;
-								bestY = j;
-								bestDistance = euclidianDistance;
-							}
-						}
-					}
-				}
-			}
-		}
-		//System.out.println(bestDistance);
-		if (bestDistance == Long.MAX_VALUE) {
-			bestDistance = offset+1d;
-		}
-		
-		if (bestX!=-1) {
-			g2d.setColor(new Color(0.2f,1,1,0.2f));
-			BasicStroke bs = new BasicStroke(1);
-			g2d.setStroke(bs);
-			g2d.drawLine(x,y, bestX, bestY);
-		}
-		System.out.println("best "+bestDistance);
-		return bestDistance;
+	public BufferedImage getPattern() {
+		return pattern;
 	}
 
-	public BufferedImage getDebugImg() {
-		return debugImg;
+	public void setImage(BufferedImage image) {
+		this.image = getEdgesFor(image);
 	}
 
+	public BufferedImage getImage() {
+		return image;
+	}
+	
+	public void detect() {
+		RelativeHausdorffDistance hd = new RelativeHausdorffDistance();
+		
+		double val1 = hd.iterate(image,pattern );
+		//debugImg1 = hd.getDebugImg();
+		
+		double val2 = hd.iterate(pattern, image);
+		//debugImg2 = hd.getDebugImg();
+		
+		System.out.println("== "+val1+" - "+ val2+" ==");
+		System.out.println("==== RES ");
+		if (val2>val1) {
+			System.out.println(val2);
+		} else {
+			System.out.println(val1);
+		}
+	}
+	
+	public BufferedImage getDebugImg1() {
+		return debugImg1;
+	}
 
+	public BufferedImage getDebugImg2() {
+		return debugImg2;
+	}
+
+	public BufferedImage getEdgesFor(BufferedImage img) {
+		CannyEdgeDetector detector = new CannyEdgeDetector();
+		BufferedImage resized = ImgUtil.resize(img, 100,100, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+		detector.setSourceImage(resized);
+		detector.process();
+		return detector.getEdgesImage();
+	}
+	
+	
 	
 }
