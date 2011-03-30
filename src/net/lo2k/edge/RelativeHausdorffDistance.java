@@ -14,6 +14,13 @@ public class RelativeHausdorffDistance {
 	}
 	
 	public double iterate(BufferedImage groupA, BufferedImage groupB) {
+		if (ImgUtil.getWhitePixelsFor(groupA)==0) {
+			return Double.MAX_VALUE;
+		}
+		
+		if (ImgUtil.getWhitePixelsFor(groupB)==0) {
+			return Double.MAX_VALUE;
+		}
 		
 		//debugImg = new BufferedImage(groupA.getWidth(), groupB.getHeight(), BufferedImage.TYPE_INT_RGB);
 		//g2d = debugImg.createGraphics();
@@ -47,6 +54,7 @@ public class RelativeHausdorffDistance {
 				}
 			}
 		}
+
 		/*System.out.println("DEBUG info");
 		System.out.println("nbPoint: "+nbWhitePoint );
 		System.out.println("distance: "+distance);*/

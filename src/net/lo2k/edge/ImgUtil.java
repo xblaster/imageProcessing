@@ -113,4 +113,14 @@ public class ImgUtil {
 		  
 		  return res;
 	  }
+	  
+	  public static BufferedImage getSubImage(BufferedImage image, int subX, int subY, int subWidth, int subHeight) {
+		  		BufferedImage sub = new BufferedImage(subWidth, subHeight,
+				  BufferedImage.TYPE_INT_RGB);
+				  Graphics2D g = sub.createGraphics();
+				  g.drawImage(image, -subX, -subY, null);
+				  g.dispose();
+				  
+				  return sub; 
+	  }
 }

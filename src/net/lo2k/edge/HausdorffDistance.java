@@ -16,7 +16,7 @@ public class HausdorffDistance {
 	}
 	
 	public void setPattern(BufferedImage pattern) {
-		this.pattern = getEdgesFor(pattern);
+		this.pattern = pattern;
 	}
 
 	public BufferedImage getPattern() {
@@ -24,14 +24,14 @@ public class HausdorffDistance {
 	}
 
 	public void setImage(BufferedImage image) {
-		this.image = getEdgesFor(image);
+		this.image = image;
 	}
 
 	public BufferedImage getImage() {
 		return image;
 	}
 	
-	public void detect() {
+	public double getDistance() {
 		RelativeHausdorffDistance hd = new RelativeHausdorffDistance();
 		
 		double val1 = hd.iterate(image,pattern );
@@ -40,12 +40,14 @@ public class HausdorffDistance {
 		double val2 = hd.iterate(pattern, image);
 		//debugImg2 = hd.getDebugImg();
 		
-		System.out.println("== "+val1+" - "+ val2+" ==");
-		System.out.println("==== RES ");
+		//System.out.println("== "+val1+" - "+ val2+" ==");
+		//System.out.println("==== RES ");
 		if (val2>val1) {
-			System.out.println(val2);
+			//System.out.println(val2);
+			return val2;
 		} else {
-			System.out.println(val1);
+			//System.out.println(val1);
+			return val1;
 		}
 	}
 	
@@ -57,13 +59,7 @@ public class HausdorffDistance {
 		return debugImg2;
 	}
 
-	public BufferedImage getEdgesFor(BufferedImage img) {
-		CannyEdgeDetector detector = new CannyEdgeDetector();
-		BufferedImage resized = ImgUtil.resize(img, 100,100, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-		detector.setSourceImage(resized);
-		detector.process();
-		return detector.getEdgesImage();
-	}
+
 	
 	
 	

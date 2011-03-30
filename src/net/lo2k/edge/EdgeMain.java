@@ -3,9 +3,9 @@ package net.lo2k.edge;
 import java.awt.GridLayout;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -13,14 +13,17 @@ import javax.swing.JPanel;
 
 public class EdgeMain extends JPanel {
 
+	
+	private static final String IMG_URL = "seek.jpg";
+	private static final String FIND_IMG_URL = "pattern.jpg";
 	//ball
-	private static final String IMG_URL = "http://www.insolite.ca/wp-content/uploads/2009/10/soccer-ball.jpg";
+	//private static final String IMG_URL = "http://www.insolite.ca/wp-content/uploads/2009/10/soccer-ball.jpg";
 	
 	//ball2
 	//private static final String FIND_IMG_URL = "http://www.footballpictures.net/data/media/144/Euro-2008-official-ball.jpg";
 	
 	//trian
-	private static final String FIND_IMG_URL = "http://www.montigny78.fr/montigny/2101/TRIANGLE3.JPG";
+	//private static final String FIND_IMG_URL = "http://www.montigny78.fr/montigny/2101/TRIANGLE3.JPG";
 		
 	//plage
 	//private static final String FIND_IMG_URL = "http://www.photoway.com/images/martinique/plus-belle-plage.jpg";
@@ -34,8 +37,11 @@ public class EdgeMain extends JPanel {
 	public static void main(String args[]) throws MalformedURLException,
 			IOException {
 
-		BufferedImage imageOne = ImageIO.read(new URL(IMG_URL));
-		BufferedImage imagePattern = ImageIO.read(new URL(FIND_IMG_URL));
+		/*BufferedImage imageOne = ImageIO.read(new URL(IMG_URL));
+		BufferedImage imagePattern = ImageIO.read(new URL(FIND_IMG_URL));*/
+		
+		BufferedImage imageOne = ImageIO.read(new File(IMG_URL));
+		BufferedImage imagePattern = ImageIO.read(new File(FIND_IMG_URL));
 		
 		//resize 
 		BufferedImage resized = ImgUtil.resize(imageOne, imageOne.getWidth()/2, imageOne.getHeight()/2, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
@@ -74,18 +80,24 @@ public class EdgeMain extends JPanel {
 		frame.setLayout(new GridLayout(2, 2));
 		//frame.add(new DisplayPanel(imageTwo));
 
-		HausdorffDistance pDetector = new HausdorffDistance();
+		Detector detector = new Detector();
+		HausdorffDistance hausdorffDis = new HausdorffDistance();
 		
-		frame.add(new DisplayPanel(pDetector.getEdgesFor(imageOne)));
-		frame.add(new DisplayPanel(pDetector.getEdgesFor(imagePattern)));
+		frame.add(new DisplayPanel(detector.getEdgesFor(imageOne)));
+		frame.add(new DisplayPanel(detector.getEdgesFor(imagePattern)));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.pack();
 		
 		
-		pDetector.setImage(imageOne);
-		pDetector.setPattern(imagePattern);
-		pDetector.detect();
+		/*hausdorffDis.setImage(imageOne);
+		hausdorffDis.setPattern(imagePattern);
+		hausdorffDis.getDistance();*/
+		detector.setImage(imageOne);
+		detector.setPattern(imagePattern);
+		
+		detector.detect();
+		
 		
 		//frame.add(new DisplayPanel(pDetector.getDebugImg1()));
 		//frame.add(new DisplayPanel(pDetector.getDebugImg2()));
