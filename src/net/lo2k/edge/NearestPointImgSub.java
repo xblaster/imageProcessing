@@ -31,7 +31,7 @@ public class NearestPointImgSub extends NearestPointImg{
 	}
 
 	public double getNearestDistanceFrom(int i, int j) {
-		return offsetedImg.getNearestDistanceFrom(i-offsetX, j-offsetY);
+		return offsetedImg.getNearestDistanceFrom(i+offsetX, j+offsetY);
 	}
 	
 	
