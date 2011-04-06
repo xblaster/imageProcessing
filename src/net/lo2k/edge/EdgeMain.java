@@ -52,13 +52,12 @@ public class EdgeMain extends JPanel {
 
 		Detector detector = new Detector();
 		
-		//frame.add(new DisplayPanel(detector.getEdgesFor(imageOne)));
 		//frame.add(new DisplayPanel(detector.getEdgesFor(imagePattern)));
-		//frame.add(new DisplayPanel(imageOne));
+		frame.add(new DisplayPanel(imageOne));
 		frame.add(new DisplayPanel(detector.getEdgesFor(imageOne)));
 		
-		NearestPointImg nearImg = new NearestPointImg(detector.getEdgesFor(imageOne));
-		frame.add(new DisplayPanel(nearImg.getDebugImage()));
+		//NearestPointImg nearImg = new NearestPointImg(detector.getEdgesFor(imageOne));
+		//frame.add(new DisplayPanel(nearImg.getDebugImage()));
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
@@ -81,11 +80,11 @@ public class EdgeMain extends JPanel {
 			}
 		});
 		
-		//Rectangle rect = detector.detect();
+		Rectangle rect = detector.detect();
 		
 		Graphics2D g2d = imageOne.createGraphics();
 		g2d.setColor(Color.RED);
-		//g2d.drawRect(rect.x, rect.y, rect.width, rect.height);
+		g2d.drawRect(rect.x, rect.y, rect.width, rect.height);
 		
 		
 		frame.repaint();

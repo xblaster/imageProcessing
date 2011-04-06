@@ -13,52 +13,30 @@ public class RelativeHausdorffDistance {
 	public RelativeHausdorffDistance() {
 	}
 	
-	public double iterate(BufferedImage groupA, BufferedImage groupB) {
-		int nbWhitePoint = ImgUtil.getWhitePixelsFor(groupA);
-		if (nbWhitePoint==0) {
-			return Double.MAX_VALUE;
-		}
+	public double iterate(NearestPointImg groupA, NearestPointImg groupB) {
 		
-		if (ImgUtil.getWhitePixelsFor(groupB)==0) {
-			return Double.MAX_VALUE;
-		}
-		
-		//debugImg = new BufferedImage(groupA.getWidth(), groupB.getHeight(), BufferedImage.TYPE_INT_RGB);
-		//g2d = debugImg.createGraphics();
 		
 		double distance = 0d;
-		double distanceBeforeBreak = 50*nbWhitePoint;
 		int width = groupA.getWidth();
 		int height = groupA.getHeight();
+		int nbWhitePoint = 0;
 		
 		
 		for (int i = 0; i < width; i++) {
-			double offset = height / DIVISED_OFFSET;
 			for (int j = 0; j < height; j++) {
-				if (ImgUtil.isWhitePixel(groupA, i, j)) {
+				if (groupA.getNearestDistanceFrom(i, j)==0) {
 					nbWhitePoint++;
-					double localDistance = calculateNeareastPointDistance(groupB,i,j,(int)offset); 
+					double localDistance = calculateNeareastPointDistance(groupB,i,j); 
 					distance += localDistance;
 					
-					//DIRT HACK TO SPEEDUP ALGO
-					if (distance>distanceBeforeBreak) {
-						return Double.MAX_VALUE;
-					}
-					
-					offset = localDistance;
 					
 					//debug img
-					int greyLevel = 255-((int) localDistance*20);
+					/*int greyLevel = 255-((int) localDistance*20);
 					if (greyLevel < 0) {
 						greyLevel = 0;
-					}
+					}*/
 					//debugImg.setRGB(i, j, ImgUtil.toRGB(greyLevel, greyLevel, greyLevel));
-				} else {
-					offset += 1d;
-					//limit the offset
-					if (offset > height/DIVISED_OFFSET) 
-						offset = height/DIVISED_OFFSET;
-				}
+				} 
 			}
 		}
 
@@ -69,52 +47,8 @@ public class RelativeHausdorffDistance {
 	}
 
 
-	private double calculateNeareastPointDistance(BufferedImage groupB2, int x, int y, int offset) {
-		/*System.out.println("===========================");
-		System.out.println("Nearest for " + x + "," + y);
-		System.out.println("offset "+offset);*/
-		if (ImgUtil.isWhitePixel(groupB2, x, y)) {
-			//System.out.println("Exact match ! 0l");
-			return 0l;
-		}
-		double bestDistance = Long.MAX_VALUE;
-		
-		int bestX = -1;
-		int bestY = -1;
-		
-		for (int i = x-offset/2; i < x+offset/2; i++) {
-			for (int j = y-offset/2; j < y+offset/2; j++) {
-				if (ImgUtil.isWhitePixel(groupB2, i, j)) {
-					//small optimisation
-					if (Math.abs(i - x) < bestDistance) {
-						if (Math.abs(j - y) < bestDistance) {
-							//double euclidianDistance = Math.sqrt((i - x)*(i - x)
-								//	+ (j - y)*(j - y));
-							double euclidianDistance = (i - x)*(i - x)+ (j - y)*(j - y);
-							if (euclidianDistance < bestDistance) {
-								//System.out.println("Best at "+i+", "+j+" -> "+euclidianDistance);
-								bestX = i;
-								bestY = j;
-								bestDistance = euclidianDistance;
-							}
-						}
-					}
-				}
-			}
-		}
-		//System.out.println(bestDistance);
-		if (bestDistance == Long.MAX_VALUE) {
-			bestDistance = offset+1d;
-		}
-		
-		/*if (bestX!=-1) {
-			g2d.setColor(new Color(0.2f,1,1,0.2f));
-			BasicStroke bs = new BasicStroke(1);
-			g2d.setStroke(bs);
-			g2d.drawLine(x,y, bestX, bestY);
-		}*/
-		//System.out.println("best "+bestDistance);
-		return bestDistance;
+	private double calculateNeareastPointDistance(NearestPointImg groupB2, int x, int y) {
+		return groupB2.getNearestDistanceFrom(x, y);
 	}
 
 	/*public BufferedImage getDebugImg() {

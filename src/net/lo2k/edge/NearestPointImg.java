@@ -7,7 +7,7 @@ import java.util.List;
 public class NearestPointImg {
 	
 	private double[][] nearestArr;
-	private BufferedImage img;
+	protected BufferedImage img;
 	
 	private class PopulateAction {
 		
@@ -23,6 +23,9 @@ public class NearestPointImg {
 	
 	private List<PopulateAction> actions;
 	
+	public NearestPointImg() {
+		
+	}
 	
 	public NearestPointImg(BufferedImage img) {
 		this.img = img;
@@ -120,5 +123,13 @@ public class NearestPointImg {
 			}
 		}
 		return res;
+	}
+
+	public int getWidth() {
+		return img.getWidth();
+	}
+	
+	public int getHeight() {
+		return img.getHeight();
 	}
 }

@@ -34,10 +34,13 @@ public class HausdorffDistance {
 	public double getDistance() {
 		RelativeHausdorffDistance hd = new RelativeHausdorffDistance();
 		
-		double val1 = hd.iterate(image,pattern );
+		NearestPointImg nearImage = new NearestPointImg(image);
+		NearestPointImg nearPattern = new NearestPointImg(pattern);
+		
+		double val1 = hd.iterate(nearImage,nearPattern );
 		//debugImg1 = hd.getDebugImg();
 		
-		double val2 = hd.iterate(pattern, image);
+		double val2 = hd.iterate(nearPattern, nearImage);
 		//debugImg2 = hd.getDebugImg();
 		
 		//System.out.println("== "+val1+" - "+ val2+" ==");
