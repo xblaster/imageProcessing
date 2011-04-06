@@ -39,35 +39,10 @@ public class EdgeMain extends JPanel {
 	public static void main(String args[]) throws MalformedURLException,
 			IOException {
 
-		/*BufferedImage imageOne = ImageIO.read(new URL(IMG_URL));
-		BufferedImage imagePattern = ImageIO.read(new URL(FIND_IMG_URL));*/
-		
 		final BufferedImage imageOne = ImageIO.read(new File(IMG_URL));
 		BufferedImage imagePattern = ImageIO.read(new File(FIND_IMG_URL));
 		
-		/*CannyEdgeDetector detector = new CannyEdgeDetector();
-		detector.setSourceImage(imageOne);
-		/*detector.setLowThreshold(0.5f);
-		detector.setHighThreshold(1f);*/
-		/*detector.process();
-		BufferedImage imageOneEdge = detector.getEdgesImage();
-		
-		detector = new CannyEdgeDetector();
-		detector.setSourceImage(imagePattern);
-		detector.process();
-		BufferedImage imagePatternEdge = detector.getEdgesImage();*/
 
-		
-		/*for (int x = 0; x < resized.getWidth(); x++) {
-			for (int y = 0; y < resized.getHeight(); y++) {
-				//System.out.println((int)imageTwo.getRGB(x, y));
-				if (ImgUtil.isWhitePixel(imageTwo, x, y)) {
-					
-					imageTwo.setRGB(x, y, imageOne.getRGB(x, y));
-				}
-				//imageTwo.setRGB(x, y, imageOne.getRGB(x, y));
-			}
-		}*/
 		
 		final JFrame frame = new JFrame();
 
@@ -76,18 +51,18 @@ public class EdgeMain extends JPanel {
 
 		Detector detector = new Detector();
 		
-		//frame.add(new DisplayPanel(detector.getEdgesFor(imageOne)));
 		//frame.add(new DisplayPanel(detector.getEdgesFor(imagePattern)));
 		frame.add(new DisplayPanel(imageOne));
 		frame.add(new DisplayPanel(detector.getEdgesFor(imageOne)));
+		
+		//NearestPointImg nearImg = new NearestPointImg(detector.getEdgesFor(imageOne));
+		//frame.add(new DisplayPanel(nearImg.getDebugImage()));
+		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
 		frame.pack();
 		
 		
-		/*hausdorffDis.setImage(imageOne);
-		hausdorffDis.setPattern(imagePattern);
-		hausdorffDis.getDistance();*/
 		detector.setImage(imageOne);
 		detector.setPattern(imagePattern);
 		
@@ -97,12 +72,9 @@ public class EdgeMain extends JPanel {
 			
 			@Override
 			public void onAction(Rectangle rect) {
-				//frame.removeAll();
 				Graphics2D g2d = imageOne.createGraphics();
 				g2d.setColor(new Color(1,0,0,0.2f));
 				g2d.drawRect(rect.x, rect.y, rect.width, rect.height);
-				//frame.add(new DisplayPanel(imageOne));
-				//frame.pack();
 				frame.repaint();
 			}
 		});
@@ -114,8 +86,6 @@ public class EdgeMain extends JPanel {
 		g2d.drawRect(rect.x, rect.y, rect.width, rect.height);
 		
 		
-		//frame.add(new DisplayPanel(pDetector.getDebugImg1()));
-		//frame.add(new DisplayPanel(pDetector.getDebugImg2()));
 		frame.repaint();
 	}
 

@@ -13,9 +13,13 @@ public class Detector {
 	private BufferedImage pattern;
 	private BufferedImage image;
 
+	private NearestPointImg nearPattern;
+	private NearestPointImg nearImage;
+
+	
 	private Listener<Rectangle> listener;
 	
-	public static int INCREMENT = 20;
+	public static int INCREMENT = 10;
 	
 	public Detector() {
 		hausdorffDistance = new HausdorffDistance();
@@ -24,6 +28,10 @@ public class Detector {
 	public Rectangle detect() {
 		JFrame frame = new JFrame();
 		BufferedImage dbgImg = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_RGB);
+		
+		
+		nearImage = new NearestPointImg(image);
+		nearPattern = new NearestPointImg(pattern);
 		
 		frame.add(new DisplayPanel(dbgImg));
 		frame.setVisible(true);
@@ -38,10 +46,8 @@ public class Detector {
 		int height = image.getHeight() - pattern.getHeight();
 		for (int i = 0; i < width; i=i+INCREMENT) {
 			for (int j = 0; j < height; j=j+INCREMENT) {
-				hausdorffDistance.setImage(image.getSubimage(i, j, pattern.getWidth(), pattern.getHeight()));
-				//hausdorffDistance.setImage(ImgUtil.getSubimage(i, j, 100, 100));
-				hausdorffDistance.setPattern(pattern);
-				//System.out.println(i+", "+j+" => "+hausdorffDistance.getDistance());
+				hausdorffDistance.setImage(new NearestPointImgSub(nearImage, i, j, pattern.getWidth(), pattern.getHeight()));
+				hausdorffDistance.setPattern(nearPattern);
 				double dist = hausdorffDistance.getDistance();
 				int val = (int) dist; 
 				if(val>255) {
@@ -81,7 +87,7 @@ public class Detector {
 		
 		for (int i2 = 0; i2 < size; i2++) {
 			for (int j2 = 0; j2 < size; j2++) {
-				img.setRGB(i+50+i2, j+50+j2, color);
+				img.setRGB(i+i2, j+j2, color);
 			}
 		}
 	}
