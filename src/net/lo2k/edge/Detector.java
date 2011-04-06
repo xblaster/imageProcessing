@@ -15,7 +15,7 @@ public class Detector {
 
 	private Listener<Rectangle> listener;
 	
-	public static int INCREMENT = 20;
+	public static int INCREMENT = 25;
 	
 	public Detector() {
 		hausdorffDistance = new HausdorffDistance();
@@ -81,7 +81,7 @@ public class Detector {
 		
 		for (int i2 = 0; i2 < size; i2++) {
 			for (int j2 = 0; j2 < size; j2++) {
-				img.setRGB(i+50+i2, j+50+j2, color);
+				img.setRGB(i+i2, j+j2, color);
 			}
 		}
 	}
