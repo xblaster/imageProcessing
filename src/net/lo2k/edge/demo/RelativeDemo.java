@@ -1,4 +1,4 @@
-package net.lo2k.edge;
+package net.lo2k.edge.demo;
 
 
 import java.awt.GridLayout;
@@ -11,6 +11,11 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import net.lo2k.edge.Detector;
+import net.lo2k.edge.DisplayPanel;
+import net.lo2k.edge.NearestPointImg;
+import net.lo2k.edge.RelativeHausdorffDistance;
 
 public class RelativeDemo extends JPanel {
 
