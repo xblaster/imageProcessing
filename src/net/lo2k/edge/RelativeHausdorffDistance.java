@@ -9,8 +9,16 @@ public class RelativeHausdorffDistance {
 
 	//will not search farther than width/4 size of the image
 	private static final short DIVISED_OFFSET = 4;
+	private boolean debug;
+	private BufferedImage debugImg;
+	
+	public RelativeHausdorffDistance(boolean debug) {
+		this.debug = debug;
+	}
+	
 	
 	public RelativeHausdorffDistance() {
+		this(false);
 	}
 	
 	public double iterate(NearestPointImg groupA, NearestPointImg groupB) {
@@ -20,6 +28,10 @@ public class RelativeHausdorffDistance {
 		int width = groupA.getWidth();
 		int height = groupA.getHeight();
 		int nbWhitePoint = 0;
+		
+		if (debug) {
+			debugImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		}
 		
 		
 		for (int i = 0; i < width; i++) {
@@ -31,11 +43,14 @@ public class RelativeHausdorffDistance {
 					
 					
 					//debug img
-					/*int greyLevel = 255-((int) localDistance*20);
-					if (greyLevel < 0) {
-						greyLevel = 0;
-					}*/
-					//debugImg.setRGB(i, j, ImgUtil.toRGB(greyLevel, greyLevel, greyLevel));
+					if (debug) {
+						int greyLevel = 255-((int) localDistance*20);
+						if (greyLevel < 0) {
+							greyLevel = 0;
+						}
+						debugImg.setRGB(i, j, ImgUtil.toRGB(greyLevel, greyLevel, greyLevel));	
+					}
+					
 				} 
 			}
 		}
@@ -51,9 +66,9 @@ public class RelativeHausdorffDistance {
 		return groupB2.getNearestDistanceFrom(x, y);
 	}
 
-	/*public BufferedImage getDebugImg() {
+	public BufferedImage getDebugImg() {
 		return debugImg;
-	}*/
+	}
 
 
 	
