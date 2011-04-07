@@ -9,6 +9,9 @@ public class NearestPointImg {
 	private double[][] nearestArr;
 	protected BufferedImage img;
 	
+	private static final double SQRT_2 = 1.41421356237309504880168872;
+	
+	
 	private class PopulateAction {
 		
 		public PopulateAction(int x, int y, double value) {
@@ -93,22 +96,22 @@ public class NearestPointImg {
 	
 	private void propagate(int i, int j, double value) {
 		
+		if ((i<0)||(j<0)||(i>=img.getWidth())||(j>=img.getHeight())) {
+			return;
+		}
 		
 		if (nearestArr[i][j] > value) {
 			nearestArr[i][j] = value;
-			//dirt but avoid stack overflow
-			if (innerGetValFor(i-1,j) > value +1) {
 				actions.add(new PopulateAction(i-1, j, value+1));
-			}
-			if (innerGetValFor(i+1,j) > value +1) {
 				actions.add(new PopulateAction(i+1, j, value+1));
-			}
-			if (innerGetValFor(i,j-1) > value +1) {
 				actions.add(new PopulateAction(i, j-1, value+1));
-			}
-			if (innerGetValFor(i,j+1) > value +1) {
 				actions.add(new PopulateAction(i, j+1, value+1));
-			}
+
+				actions.add(new PopulateAction(i-1, j-1, value+SQRT_2));
+				actions.add(new PopulateAction(i-1, j+1, value+SQRT_2));
+				actions.add(new PopulateAction(i+1, j+1, value+SQRT_2));
+				actions.add(new PopulateAction(i+1, j-1, value+SQRT_2));
+			
 		}
 		
 	}

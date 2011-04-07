@@ -19,7 +19,7 @@ public class Detector {
 	
 	private Listener<Rectangle> listener;
 	
-	public static int INCREMENT = 10;
+	public static int INCREMENT = 3;
 	
 	public Detector() {
 		hausdorffDistance = new HausdorffDistance();

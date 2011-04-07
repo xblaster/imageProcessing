@@ -1,4 +1,4 @@
-package net.lo2k.edge;
+package net.lo2k.edge.demo;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -13,6 +13,10 @@ import java.net.MalformedURLException;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import net.lo2k.edge.Detector;
+import net.lo2k.edge.DisplayPanel;
+import net.lo2k.edge.Listener;
 
 public class EdgeMain extends JPanel {
 
@@ -52,7 +56,7 @@ public class EdgeMain extends JPanel {
 
 		Detector detector = new Detector();
 		
-		//frame.add(new DisplayPanel(detector.getEdgesFor(imagePattern)));
+		frame.add(new DisplayPanel(detector.getEdgesFor(imagePattern)));
 		frame.add(new DisplayPanel(imageOne));
 		frame.add(new DisplayPanel(detector.getEdgesFor(imageOne)));
 		
